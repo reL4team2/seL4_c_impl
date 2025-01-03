@@ -882,14 +882,14 @@ cap_t CONST maskCapRights(seL4_CapRights_t cap_rights, cap_t *_cap)
 // }
 
 #ifdef CONFIG_KERNEL_MCS
-exception_t performInvocation_Endpoint(endpoint_t *ep, word_t badge,
-                                       bool_t canGrant, bool_t canGrantReply,
-                                       bool_t block, bool_t call, bool_t canDonate)
-{
-    sendIPC(block, call, badge, canGrant, canGrantReply, canDonate, NODE_STATE(ksCurThread), ep);
+// exception_t performInvocation_Endpoint(endpoint_t *ep, word_t badge,
+//                                        bool_t canGrant, bool_t canGrantReply,
+//                                        bool_t block, bool_t call, bool_t canDonate)
+// {
+//     sendIPC(block, call, badge, canGrant, canGrantReply, canDonate, NODE_STATE(ksCurThread), ep);
 
-    return EXCEPTION_NONE;
-}
+//     return EXCEPTION_NONE;
+// }
 #else
 // exception_t performInvocation_Endpoint(endpoint_t *ep, word_t badge,
 //                                        bool_t canGrant, bool_t canGrantReply,

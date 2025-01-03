@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"*.in": "cpp",
-		"functional": "c"
+		"functional": "c",
+		"structures.h": "c"
 	}
 }

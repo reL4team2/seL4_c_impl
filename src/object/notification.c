@@ -35,16 +35,16 @@ static inline void ntfn_ptr_set_queue(notification_t *ntfnPtr, tcb_queue_t ntfn_
 }
 
 #ifdef CONFIG_KERNEL_MCS
-static inline void maybeDonateSchedContext(tcb_t *tcb, notification_t *ntfnPtr)
-{
-    if (tcb->tcbSchedContext == NULL) {
-        sched_context_t *sc = SC_PTR(notification_ptr_get_ntfnSchedContext(ntfnPtr));
-        if (sc != NULL && sc->scTcb == NULL) {
-            schedContext_donate(sc, tcb);
-            schedContext_resume(sc);
-        }
-    }
-}
+// static inline void maybeDonateSchedContext(tcb_t *tcb, notification_t *ntfnPtr)
+// {
+//     if (tcb->tcbSchedContext == NULL) {
+//         sched_context_t *sc = SC_PTR(notification_ptr_get_ntfnSchedContext(ntfnPtr));
+//         if (sc != NULL && sc->scTcb == NULL) {
+//             schedContext_donate(sc, tcb);
+//             schedContext_resume(sc);
+//         }
+//     }
+// }
 
 #endif
 
@@ -358,11 +358,11 @@ static inline void maybeDonateSchedContext(tcb_t *tcb, notification_t *ntfnPtr)
 // }
 
 #ifdef CONFIG_KERNEL_MCS
-void reorderNTFN(notification_t *ntfnPtr, tcb_t *thread)
-{
-    tcb_queue_t queue = ntfn_ptr_get_queue(ntfnPtr);
-    queue = tcbEPDequeue(thread, queue);
-    queue = tcbEPAppend(thread, queue);
-    ntfn_ptr_set_queue(ntfnPtr, queue);
-}
+// void reorderNTFN(notification_t *ntfnPtr, tcb_t *thread)
+// {
+//     tcb_queue_t queue = ntfn_ptr_get_queue(ntfnPtr);
+//     queue = tcbEPDequeue(thread, queue);
+//     queue = tcbEPAppend(thread, queue);
+//     ntfn_ptr_set_queue(ntfnPtr, queue);
+// }
 #endif

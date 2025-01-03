@@ -11,16 +11,16 @@
 #include <object/structures.h>
 
 /* Unlink a reply from its tcb */
-static inline void reply_unlink(reply_t *reply, tcb_t *tcb)
-{
-    /* check the tcb and reply are linked correctly */
-    assert(reply->replyTCB == tcb);
-    assert(thread_state_get_replyObject(tcb->tcbState) == REPLY_REF(reply));
+// static inline void reply_unlink(reply_t *reply, tcb_t *tcb)
+// {
+//     /* check the tcb and reply are linked correctly */
+//     assert(reply->replyTCB == tcb);
+//     assert(thread_state_get_replyObject(tcb->tcbState) == REPLY_REF(reply));
 
-    thread_state_ptr_set_replyObject(&tcb->tcbState, REPLY_REF(0));
-    reply->replyTCB = NULL;
-    setThreadState(tcb, ThreadState_Inactive);
-}
+//     thread_state_ptr_set_replyObject(&tcb->tcbState, REPLY_REF(0));
+//     reply->replyTCB = NULL;
+//     setThreadState(tcb, ThreadState_Inactive);
+// }
 
 /* Push a reply object onto the call stack */
 void reply_push(tcb_t *tcb_caller, tcb_t *tcb_callee, reply_t *reply, bool_t canDonate);

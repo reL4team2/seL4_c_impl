@@ -1333,35 +1333,35 @@ static bool_t validFaultHandler(cap_t cap)
 // }
 
 #ifdef CONFIG_KERNEL_MCS
-exception_t decodeSetTimeoutEndpoint(cap_t cap, cte_t *slot)
-{
-    if (current_extra_caps.excaprefs[0] == NULL)
-    {
-        userError("TCB SetSchedParams: Truncated message.");
-        return EXCEPTION_SYSCALL_ERROR;
-    }
+// exception_t decodeSetTimeoutEndpoint(cap_t cap, cte_t *slot)
+// {
+//     if (current_extra_caps.excaprefs[0] == NULL)
+//     {
+//         userError("TCB SetSchedParams: Truncated message.");
+//         return EXCEPTION_SYSCALL_ERROR;
+//     }
 
-    cte_t *thSlot = current_extra_caps.excaprefs[0];
-    cap_t thCap = current_extra_caps.excaprefs[0]->cap;
+//     cte_t *thSlot = current_extra_caps.excaprefs[0];
+//     cap_t thCap = current_extra_caps.excaprefs[0]->cap;
 
-    /* timeout handler */
-    if (!validFaultHandler(thCap))
-    {
-        userError("TCB SetTimeoutEndpoint: timeout endpoint cap invalid.");
-        current_syscall_error.invalidCapNumber = 1;
-        return EXCEPTION_SYSCALL_ERROR;
-    }
+//     /* timeout handler */
+//     if (!validFaultHandler(thCap))
+//     {
+//         userError("TCB SetTimeoutEndpoint: timeout endpoint cap invalid.");
+//         current_syscall_error.invalidCapNumber = 1;
+//         return EXCEPTION_SYSCALL_ERROR;
+//     }
 
-    setThreadState(NODE_STATE(ksCurThread), ThreadState_Restart);
-    return invokeTCB_ThreadControlCaps(
-        TCB_PTR(cap_thread_cap_get_capTCBPtr(cap)), slot,
-        cap_null_cap_new(), NULL,
-        thCap, thSlot,
-        cap_null_cap_new(), NULL,
-        cap_null_cap_new(), NULL,
-        0, cap_null_cap_new(), NULL,
-        thread_control_caps_update_timeout);
-}
+//     setThreadState(NODE_STATE(ksCurThread), ThreadState_Restart);
+//     return invokeTCB_ThreadControlCaps(
+//         TCB_PTR(cap_thread_cap_get_capTCBPtr(cap)), slot,
+//         cap_null_cap_new(), NULL,
+//         thCap, thSlot,
+//         cap_null_cap_new(), NULL,
+//         cap_null_cap_new(), NULL,
+//         0, cap_null_cap_new(), NULL,
+//         thread_control_caps_update_timeout);
+// }
 #endif
 
 // #ifdef CONFIG_KERNEL_MCS
@@ -1991,46 +1991,46 @@ exception_t decodeSetTimeoutEndpoint(cap_t cap, cte_t *slot)
 #endif
 
 #ifdef CONFIG_KERNEL_MCS
-exception_t invokeTCB_ThreadControlSched(tcb_t *target, cte_t *slot,
-                                         cap_t fh_newCap, cte_t *fh_srcSlot,
-                                         prio_t mcp, prio_t priority,
-                                         sched_context_t *sc,
-                                         thread_control_flag_t updateFlags)
-{
-    if (updateFlags & thread_control_sched_update_fault)
-    {
-        cap_t tCap = cap_thread_cap_new((word_t)target);
-        exception_t e = installTCBCap(target, tCap, slot, tcbFaultHandler, fh_newCap, fh_srcSlot);
-        if (e != EXCEPTION_NONE)
-        {
-            return e;
-        }
-    }
+// exception_t invokeTCB_ThreadControlSched(tcb_t *target, cte_t *slot,
+//                                          cap_t fh_newCap, cte_t *fh_srcSlot,
+//                                          prio_t mcp, prio_t priority,
+//                                          sched_context_t *sc,
+//                                          thread_control_flag_t updateFlags)
+// {
+    // if (updateFlags & thread_control_sched_update_fault)
+    // {
+    //     cap_t tCap = cap_thread_cap_new((word_t)target);
+        // exception_t e = installTCBCap(target, tCap, slot, tcbFaultHandler, fh_newCap, fh_srcSlot);
+        // if (e != EXCEPTION_NONE)
+        // {
+        //     return e;
+        // }
+    // }
 
-    if (updateFlags & thread_control_sched_update_mcp)
-    {
-        setMCPriority(target, mcp);
-    }
+//     if (updateFlags & thread_control_sched_update_mcp)
+//     {
+//         setMCPriority(target, mcp);
+//     }
 
-    if (updateFlags & thread_control_sched_update_priority)
-    {
-        setPriority(target, priority);
-    }
+//     if (updateFlags & thread_control_sched_update_priority)
+//     {
+//         setPriority(target, priority);
+//     }
 
-    if (updateFlags & thread_control_sched_update_sc)
-    {
-        if (sc != NULL && sc != target->tcbSchedContext)
-        {
-            schedContext_bindTCB(sc, target);
-        }
-        else if (sc == NULL && target->tcbSchedContext != NULL)
-        {
-            schedContext_unbindTCB(target->tcbSchedContext, target);
-        }
-    }
+//     if (updateFlags & thread_control_sched_update_sc)
+//     {
+//         if (sc != NULL && sc != target->tcbSchedContext)
+//         {
+//             schedContext_bindTCB(sc, target);
+//         }
+//         else if (sc == NULL && target->tcbSchedContext != NULL)
+//         {
+//             schedContext_unbindTCB(target->tcbSchedContext, target);
+//         }
+//     }
 
-    return EXCEPTION_NONE;
-}
+//     return EXCEPTION_NONE;
+// }
 #endif
 
 // exception_t invokeTCB_CopyRegisters(tcb_t *dest, tcb_t *tcb_src,

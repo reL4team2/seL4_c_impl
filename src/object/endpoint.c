@@ -572,11 +572,11 @@
 // }
 
 #ifdef CONFIG_KERNEL_MCS
-void reorderEP(endpoint_t *epptr, tcb_t *thread)
-{
-    tcb_queue_t queue = ep_ptr_get_queue(epptr);
-    queue = tcbEPDequeue(thread, queue);
-    queue = tcbEPAppend(thread, queue);
-    ep_ptr_set_queue(epptr, queue);
-}
+// void reorderEP(endpoint_t *epptr, tcb_t *thread)
+// {
+//     tcb_queue_t queue = ep_ptr_get_queue(epptr);
+//     queue = tcbEPDequeue(thread, queue);
+//     queue = tcbEPAppend(thread, queue);
+//     ep_ptr_set_queue(epptr, queue);
+// }
 #endif

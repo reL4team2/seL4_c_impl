@@ -27,27 +27,27 @@
 //     sendFaultIPC(tptr, TCB_PTR_CTE_PTR(tptr, tcbTimeoutHandler)->cap, false);
 // }
 
-bool_t sendFaultIPC(tcb_t *tptr, cap_t handlerCap, bool_t can_donate)
-{
-    if (cap_get_capType(handlerCap) == cap_endpoint_cap) {
-        assert(cap_endpoint_cap_get_capCanSend(handlerCap));
-        assert(cap_endpoint_cap_get_capCanGrant(handlerCap) ||
-               cap_endpoint_cap_get_capCanGrantReply(handlerCap));
+// bool_t sendFaultIPC(tcb_t *tptr, cap_t handlerCap, bool_t can_donate)
+// {
+//     if (cap_get_capType(handlerCap) == cap_endpoint_cap) {
+//         assert(cap_endpoint_cap_get_capCanSend(handlerCap));
+//         assert(cap_endpoint_cap_get_capCanGrant(handlerCap) ||
+//                cap_endpoint_cap_get_capCanGrantReply(handlerCap));
 
-        tptr->tcbFault = current_fault;
-        sendIPC(true, false,
-                cap_endpoint_cap_get_capEPBadge(handlerCap),
-                cap_endpoint_cap_get_capCanGrant(handlerCap),
-                cap_endpoint_cap_get_capCanGrantReply(handlerCap),
-                can_donate, tptr,
-                EP_PTR(cap_endpoint_cap_get_capEPPtr(handlerCap)));
+//         tptr->tcbFault = current_fault;
+//         sendIPC(true, false,
+//                 cap_endpoint_cap_get_capEPBadge(handlerCap),
+//                 cap_endpoint_cap_get_capCanGrant(handlerCap),
+//                 cap_endpoint_cap_get_capCanGrantReply(handlerCap),
+//                 can_donate, tptr,
+//                 EP_PTR(cap_endpoint_cap_get_capEPPtr(handlerCap)));
 
-        return true;
-    } else {
-        assert(cap_get_capType(handlerCap) == cap_null_cap);
-        return false;
-    }
-}
+//         return true;
+//     } else {
+//         assert(cap_get_capType(handlerCap) == cap_null_cap);
+//         return false;
+//     }
+// }
 #else
 
 // void handleFault(tcb_t *tptr)
