@@ -491,7 +491,7 @@ LIBSEL4_INLINE_FUNC void seL4_Yield(void)
 }
 LIBSEL4_INLINE_FUNC void seL4_Shutdown(void)
 {
-	arm_sys_null(seL4_SysYield);
+	arm_sys_null(seL4_SysShutdown);
 }
 
 #ifdef CONFIG_KERNEL_MCS
