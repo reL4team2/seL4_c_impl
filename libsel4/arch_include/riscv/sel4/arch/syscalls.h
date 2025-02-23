@@ -690,6 +690,10 @@ LIBSEL4_INLINE_FUNC void seL4_Yield(void)
     register seL4_Word scno asm("a7") = seL4_SysYield;
     asm volatile("ecall" :: "r"(scno));
 }
+LIBSEL4_INLINE_FUNC void seL4_Shutdown(void)
+{
+	arm_sys_null(seL4_SysYield);
+}
 
 #ifdef CONFIG_KERNEL_MCS
 LIBSEL4_INLINE_FUNC seL4_MessageInfo_t seL4_Wait(seL4_CPtr src, seL4_Word *sender)

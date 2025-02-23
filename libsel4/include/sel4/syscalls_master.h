@@ -229,3 +229,7 @@ seL4_Poll(seL4_CPtr src, seL4_Word *sender);
 
 /** @} */
 
+
+#define seL4_SysYield -34
+LIBSEL4_INLINE_FUNC void
+seL4_Shutdown(void);

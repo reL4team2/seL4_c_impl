@@ -297,3 +297,7 @@ seL4_Signal(seL4_CPtr dest);
 
 /** @} */
 
+
+#define seL4_SysYield -34
+LIBSEL4_INLINE_FUNC void
+seL4_Shutdown(void);
