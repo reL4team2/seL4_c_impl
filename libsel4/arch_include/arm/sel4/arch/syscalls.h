@@ -489,10 +489,6 @@ LIBSEL4_INLINE_FUNC void seL4_Yield(void)
     arm_sys_null(seL4_SysYield);
     asm volatile("" ::: "memory");
 }
-LIBSEL4_INLINE_FUNC void seL4_Shutdown(void)
-{
-	arm_sys_null(seL4_SysShutdown);
-}
 
 #ifdef CONFIG_KERNEL_MCS
 LIBSEL4_INLINE_FUNC seL4_MessageInfo_t seL4_Wait(seL4_CPtr src, seL4_Word *sender)
