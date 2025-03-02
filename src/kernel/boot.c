@@ -43,58 +43,58 @@ BOOT_CODE static void merge_regions(void)
     }
 }
 
-BOOT_CODE bool_t reserve_region(p_region_t reg)
-{
-    word_t i;
-    assert(reg.start <= reg.end);
-    if (reg.start == reg.end) {
-        return true;
-    }
+// BOOT_CODE bool_t reserve_region(p_region_t reg)
+// {
+//     word_t i;
+//     assert(reg.start <= reg.end);
+//     if (reg.start == reg.end) {
+//         return true;
+//     }
 
-    /* keep the regions in order */
-    for (i = 0; i < ndks_boot.resv_count; i++) {
-        /* Try and merge the region to an existing one, if possible */
-        if (ndks_boot.reserved[i].start == reg.end) {
-            ndks_boot.reserved[i].start = reg.start;
-            merge_regions();
-            return true;
-        }
-        if (ndks_boot.reserved[i].end == reg.start) {
-            ndks_boot.reserved[i].end = reg.end;
-            merge_regions();
-            return true;
-        }
-        /* Otherwise figure out where it should go. */
-        if (ndks_boot.reserved[i].start > reg.end) {
-            /* move regions down, making sure there's enough room */
-            if (ndks_boot.resv_count + 1 >= MAX_NUM_RESV_REG) {
-                printf("Can't mark region 0x%"SEL4_PRIx_word"-0x%"SEL4_PRIx_word
-                       " as reserved, try increasing MAX_NUM_RESV_REG (currently %d)\n",
-                       reg.start, reg.end, (int)MAX_NUM_RESV_REG);
-                return false;
-            }
-            for (word_t j = ndks_boot.resv_count; j > i; j--) {
-                ndks_boot.reserved[j] = ndks_boot.reserved[j - 1];
-            }
-            /* insert the new region */
-            ndks_boot.reserved[i] = reg;
-            ndks_boot.resv_count++;
-            return true;
-        }
-    }
+//     /* keep the regions in order */
+//     for (i = 0; i < ndks_boot.resv_count; i++) {
+//         /* Try and merge the region to an existing one, if possible */
+//         if (ndks_boot.reserved[i].start == reg.end) {
+//             ndks_boot.reserved[i].start = reg.start;
+//             merge_regions();
+//             return true;
+//         }
+//         if (ndks_boot.reserved[i].end == reg.start) {
+//             ndks_boot.reserved[i].end = reg.end;
+//             merge_regions();
+//             return true;
+//         }
+//         /* Otherwise figure out where it should go. */
+//         if (ndks_boot.reserved[i].start > reg.end) {
+//             /* move regions down, making sure there's enough room */
+//             if (ndks_boot.resv_count + 1 >= MAX_NUM_RESV_REG) {
+//                 printf("Can't mark region 0x%"SEL4_PRIx_word"-0x%"SEL4_PRIx_word
+//                        " as reserved, try increasing MAX_NUM_RESV_REG (currently %d)\n",
+//                        reg.start, reg.end, (int)MAX_NUM_RESV_REG);
+//                 return false;
+//             }
+//             for (word_t j = ndks_boot.resv_count; j > i; j--) {
+//                 ndks_boot.reserved[j] = ndks_boot.reserved[j - 1];
+//             }
+//             /* insert the new region */
+//             ndks_boot.reserved[i] = reg;
+//             ndks_boot.resv_count++;
+//             return true;
+//         }
+//     }
 
-    if (i + 1 == MAX_NUM_RESV_REG) {
-        printf("Can't mark region 0x%"SEL4_PRIx_word"-0x%"SEL4_PRIx_word
-               " as reserved, try increasing MAX_NUM_RESV_REG (currently %d)\n",
-               reg.start, reg.end, (int)MAX_NUM_RESV_REG);
-        return false;
-    }
+//     if (i + 1 == MAX_NUM_RESV_REG) {
+//         printf("Can't mark region 0x%"SEL4_PRIx_word"-0x%"SEL4_PRIx_word
+//                " as reserved, try increasing MAX_NUM_RESV_REG (currently %d)\n",
+//                reg.start, reg.end, (int)MAX_NUM_RESV_REG);
+//         return false;
+//     }
 
-    ndks_boot.reserved[i] = reg;
-    ndks_boot.resv_count++;
+//     ndks_boot.reserved[i] = reg;
+//     ndks_boot.resv_count++;
 
-    return true;
-}
+//     return true;
+// }
 
 BOOT_CODE static bool_t insert_region(region_t reg)
 {
