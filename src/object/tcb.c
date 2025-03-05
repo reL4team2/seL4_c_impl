@@ -263,92 +263,92 @@ tcb_queue_t tcbEPDequeue(tcb_t *tcb, tcb_queue_t queue)
 #ifdef CONFIG_KERNEL_MCS
 void tcbReleaseRemove(tcb_t *tcb)
 {
-    if (likely(thread_state_get_tcbInReleaseQueue(tcb->tcbState)))
-    {
-        if (tcb->tcbSchedPrev)
-        {
-            tcb->tcbSchedPrev->tcbSchedNext = tcb->tcbSchedNext;
-        }
-        else
-        {
-            NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity) = tcb->tcbSchedNext;
-            /* the head has changed, we might need to set a new timeout */
-            NODE_STATE_ON_CORE(ksReprogram, tcb->tcbAffinity) = true;
-        }
+    // if (likely(thread_state_get_tcbInReleaseQueue(tcb->tcbState)))
+    // {
+    //     if (tcb->tcbSchedPrev)
+    //     {
+    //         tcb->tcbSchedPrev->tcbSchedNext = tcb->tcbSchedNext;
+    //     }
+    //     else
+    //     {
+    //         NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity) = tcb->tcbSchedNext;
+    //         /* the head has changed, we might need to set a new timeout */
+    //         NODE_STATE_ON_CORE(ksReprogram, tcb->tcbAffinity) = true;
+    //     }
 
-        if (tcb->tcbSchedNext)
-        {
-            tcb->tcbSchedNext->tcbSchedPrev = tcb->tcbSchedPrev;
-        }
+    //     if (tcb->tcbSchedNext)
+    //     {
+    //         tcb->tcbSchedNext->tcbSchedPrev = tcb->tcbSchedPrev;
+    //     }
 
-        tcb->tcbSchedNext = NULL;
-        tcb->tcbSchedPrev = NULL;
-        thread_state_ptr_set_tcbInReleaseQueue(&tcb->tcbState, false);
-    }
+    //     tcb->tcbSchedNext = NULL;
+    //     tcb->tcbSchedPrev = NULL;
+    //     thread_state_ptr_set_tcbInReleaseQueue(&tcb->tcbState, false);
+    // }
 }
 
 void tcbReleaseEnqueue(tcb_t *tcb)
 {
-    assert(thread_state_get_tcbInReleaseQueue(tcb->tcbState) == false);
-    assert(thread_state_get_tcbQueued(tcb->tcbState) == false);
+    // assert(thread_state_get_tcbInReleaseQueue(tcb->tcbState) == false);
+    // assert(thread_state_get_tcbQueued(tcb->tcbState) == false);
 
-    tcb_t *before = NULL;
-    tcb_t *after = NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity);
+    // tcb_t *before = NULL;
+    // tcb_t *after = NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity);
 
-    /* find our place in the ordered queue */
-    while (after != NULL &&
-           refill_head(tcb->tcbSchedContext)->rTime >= refill_head(after->tcbSchedContext)->rTime)
-    {
-        before = after;
-        after = after->tcbSchedNext;
-    }
+    // /* find our place in the ordered queue */
+    // while (after != NULL &&
+    //        refill_head(tcb->tcbSchedContext)->rTime >= refill_head(after->tcbSchedContext)->rTime)
+    // {
+    //     before = after;
+    //     after = after->tcbSchedNext;
+    // }
 
-    if (before == NULL)
-    {
-        /* insert at head */
-        NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity) = tcb;
-        NODE_STATE_ON_CORE(ksReprogram, tcb->tcbAffinity) = true;
-    }
-    else
-    {
-        before->tcbSchedNext = tcb;
-    }
+    // if (before == NULL)
+    // {
+    //     /* insert at head */
+    //     NODE_STATE_ON_CORE(ksReleaseHead, tcb->tcbAffinity) = tcb;
+    //     NODE_STATE_ON_CORE(ksReprogram, tcb->tcbAffinity) = true;
+    // }
+    // else
+    // {
+    //     before->tcbSchedNext = tcb;
+    // }
 
-    if (after != NULL)
-    {
-        after->tcbSchedPrev = tcb;
-    }
+    // if (after != NULL)
+    // {
+    //     after->tcbSchedPrev = tcb;
+    // }
 
-    tcb->tcbSchedNext = after;
-    tcb->tcbSchedPrev = before;
+    // tcb->tcbSchedNext = after;
+    // tcb->tcbSchedPrev = before;
 
-    thread_state_ptr_set_tcbInReleaseQueue(&tcb->tcbState, true);
+    // thread_state_ptr_set_tcbInReleaseQueue(&tcb->tcbState, true);
 }
 
 tcb_t *tcbReleaseDequeue(void)
 {
-    assert(NODE_STATE(ksReleaseHead) != NULL);
-    assert(NODE_STATE(ksReleaseHead)->tcbSchedPrev == NULL);
-    SMP_COND_STATEMENT(assert(NODE_STATE(ksReleaseHead)->tcbAffinity == getCurrentCPUIndex()));
+    // assert(NODE_STATE(ksReleaseHead) != NULL);
+    // assert(NODE_STATE(ksReleaseHead)->tcbSchedPrev == NULL);
+    // SMP_COND_STATEMENT(assert(NODE_STATE(ksReleaseHead)->tcbAffinity == getCurrentCPUIndex()));
 
-    tcb_t *detached_head = NODE_STATE(ksReleaseHead);
-    NODE_STATE(ksReleaseHead) = NODE_STATE(ksReleaseHead)->tcbSchedNext;
+    // tcb_t *detached_head = NODE_STATE(ksReleaseHead);
+    // NODE_STATE(ksReleaseHead) = NODE_STATE(ksReleaseHead)->tcbSchedNext;
 
-    if (NODE_STATE(ksReleaseHead))
-    {
-        NODE_STATE(ksReleaseHead)->tcbSchedPrev = NULL;
-    }
+    // if (NODE_STATE(ksReleaseHead))
+    // {
+    //     NODE_STATE(ksReleaseHead)->tcbSchedPrev = NULL;
+    // }
 
-    if (detached_head->tcbSchedNext)
-    {
-        detached_head->tcbSchedNext->tcbSchedPrev = NULL;
-        detached_head->tcbSchedNext = NULL;
-    }
+    // if (detached_head->tcbSchedNext)
+    // {
+    //     detached_head->tcbSchedNext->tcbSchedPrev = NULL;
+    //     detached_head->tcbSchedNext = NULL;
+    // }
 
-    thread_state_ptr_set_tcbInReleaseQueue(&detached_head->tcbState, false);
-    NODE_STATE(ksReprogram) = true;
+    // thread_state_ptr_set_tcbInReleaseQueue(&detached_head->tcbState, false);
+    // NODE_STATE(ksReprogram) = true;
 
-    return detached_head;
+    // return detached_head;
 }
 #endif
 
