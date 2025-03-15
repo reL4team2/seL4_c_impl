@@ -678,15 +678,17 @@ if(KernelArchARM)
     link_directories(../rel4_kernel/target/aarch64-unknown-none-softfloat/release)
 endif()
 # Declare final kernel output
-add_executable(kernel.elf EXCLUDE_FROM_ALL ${asm_sources} kernel_all.c)
-target_include_directories(kernel.elf PRIVATE ${config_dir})
-target_include_directories(kernel.elf PRIVATE include)
-target_include_directories(kernel.elf PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
-target_link_libraries(kernel.elf PRIVATE kernel_Config kernel_autoconf rustlib)
-set_property(TARGET kernel.elf APPEND_STRING PROPERTY LINK_FLAGS " -Wl,-T ${linker_lds_path} ")
-set_target_properties(kernel.elf PROPERTIES LINK_DEPENDS "${linker_lds_path}")
-add_dependencies(kernel.elf circular_includes)
 
+if(NOT REL4_KERNEL)
+    add_executable(kernel.elf EXCLUDE_FROM_ALL ${asm_sources} kernel_all.c)
+    target_include_directories(kernel.elf PRIVATE ${config_dir})
+    target_include_directories(kernel.elf PRIVATE include)
+    target_include_directories(kernel.elf PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
+    target_link_libraries(kernel.elf PRIVATE kernel_Config kernel_autoconf rustlib)
+    set_property(TARGET kernel.elf APPEND_STRING PROPERTY LINK_FLAGS " -Wl,-T ${linker_lds_path} ")
+    set_target_properties(kernel.elf PROPERTIES LINK_DEPENDS "${linker_lds_path}")
+    add_dependencies(kernel.elf circular_includes)
+endif()
 # The following commands setup the install target for copying generated files and
 # compilation outputs to an install location: CMAKE_INSTALL_PREFIX.
 # CMAKE_INSTALL_PREFIX can be set on the cmake command line.
@@ -703,12 +705,17 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
 
     # Import libsel4 to get access to generation targets
     add_subdirectory(libsel4)
-    # Add a default target that builds kernel.elf and generates all libsel4 headers
-    add_custom_target(single-project ALL DEPENDS sel4_generated kernel.elf)
     # Disable the libsel4.a target as we don't intend to build the libsel4 sources
     set_target_properties(sel4 PROPERTIES EXCLUDE_FROM_ALL ON)
-    # Install kernel.elf to bin/kernel.elf
-    install(TARGETS kernel.elf RUNTIME DESTINATION bin)
+    if(NOT REL4_KERNEL)
+        # Add a default target that builds kernel.elf and generates all libsel4 headers
+        add_custom_target(single-project ALL DEPENDS sel4_generated kernel.elf)
+        # Install kernel.elf to bin/kernel.elf
+        install(TARGETS kernel.elf RUNTIME DESTINATION bin)
+    else()
+        # Add a default target that generates all libsel4 headers
+        add_custom_target(single-project ALL DEPENDS sel4_generated)
+    endif()
     # Install all libsel4 headers to libsel4/include
     install(
         DIRECTORY
