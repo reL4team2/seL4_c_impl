@@ -12,20 +12,20 @@
 
 #ifdef CONFIG_HAVE_FPU
 /* Switch the owner of the FPU to the given thread on local core. */
-void switchLocalFpuOwner(user_fpu_state_t *new_owner)
-{
-    enableFpu();
-    if (NODE_STATE(ksActiveFPUState)) {
-        saveFpuState(NODE_STATE(ksActiveFPUState));
-    }
-    if (new_owner) {
-        NODE_STATE(ksFPURestoresSinceSwitch) = 0;
-        loadFpuState(new_owner);
-    } else {
-        disableFpu();
-    }
-    NODE_STATE(ksActiveFPUState) = new_owner;
-}
+// void switchLocalFpuOwner(user_fpu_state_t *new_owner)
+// {
+//     enableFpu();
+//     if (NODE_STATE(ksActiveFPUState)) {
+//         saveFpuState(NODE_STATE(ksActiveFPUState));
+//     }
+//     if (new_owner) {
+//         NODE_STATE(ksFPURestoresSinceSwitch) = 0;
+//         loadFpuState(new_owner);
+//     } else {
+//         disableFpu();
+//     }
+//     NODE_STATE(ksActiveFPUState) = new_owner;
+// }
 
 void switchFpuOwner(user_fpu_state_t *new_owner, word_t cpu)
 {
@@ -35,7 +35,7 @@ void switchFpuOwner(user_fpu_state_t *new_owner, word_t cpu)
     } else
 #endif /* ENABLE_SMP_SUPPORT */
     {
-        switchLocalFpuOwner(new_owner);
+        // switchLocalFpuOwner(new_owner);
     }
 }
 
@@ -52,7 +52,7 @@ exception_t handleFPUFault(void)
     assert(!nativeThreadUsingFPU(NODE_STATE(ksCurThread)));
 
     /* Otherwise, lazily switch over the FPU. */
-    switchLocalFpuOwner(&NODE_STATE(ksCurThread)->tcbArch.tcbContext.fpuState);
+    // switchLocalFpuOwner(&NODE_STATE(ksCurThread)->tcbArch.tcbContext.fpuState);
 
     return EXCEPTION_NONE;
 }

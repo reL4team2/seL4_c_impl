@@ -52,14 +52,14 @@ void VISIBLE NORETURN c_handle_undefined_instruction(void)
 }
 
 #if defined(CONFIG_HAVE_FPU) && defined(CONFIG_ARCH_AARCH64)
-void VISIBLE NORETURN c_handle_enfp(void)
-{
-    c_entry_hook();
+// void VISIBLE NORETURN c_handle_enfp(void)
+// {
+//     c_entry_hook();
 
-    handleFPUFault();
-    restore_user_context();
-    UNREACHABLE();
-}
+//     handleFPUFault();
+//     restore_user_context();
+//     UNREACHABLE();
+// }
 #endif /* CONFIG_HAVE_FPU */
 
 #ifdef CONFIG_EXCEPTION_FASTPATH
