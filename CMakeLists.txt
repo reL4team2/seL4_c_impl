@@ -668,10 +668,10 @@ add_custom_target(kernel_all_pp_wrapper DEPENDS kernel_all_pp.c)
 
 add_custom_target(kernel_theories DEPENDS ${theories_deps})
 
-# link_directories(../target/riscv64imac-unknown-none-elf/release)
+# link_directories(../target/riscv64gc-unknown-none-elf/release)
 if(KernelArchRiscV)
     message(STATUS "ARCH ${KernelArchRiscV}")
-    link_directories(../rel4_kernel/target/riscv64imac-unknown-none-elf/release)
+    link_directories(../rel4_kernel/target/riscv64gc-unknown-none-elf/release)
 endif()
 if(KernelArchARM)
     message(STATUS "ARCH ${KernelArchARM}")
