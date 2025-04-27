@@ -122,7 +122,8 @@ def get_elfloader_cpus(tree: fdt.FdtParser, devices: List[device.WrappedNode]) -
 
         extra_data = 0
         if enable_method == 'psci' and psci_node:
-            extra_data = 'PSCI_METHOD_' + psci_node.get_prop('method').strings[0].upper()
+            # extra_data = 'PSCI_METHOD_' + psci_node.get_prop('method').strings[0].upper()
+            extra_data = 'PSCI_METHOD_SMC'
         elif enable_method == 'spin-table':
             extra_data = '0x{:x}'.format(
                 device.Utils.make_number(2, list(cpu_node.get_prop('cpu-release-addr').words)))
