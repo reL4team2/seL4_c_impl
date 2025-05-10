@@ -632,6 +632,8 @@ bool_t rust_try_init_kernel(
     word_t dtb_size);
 void pRegsToR(word_t *, word_t);
 
+bool_t rust_try_init_kernel_secondary_core();
+
 BOOT_CODE VISIBLE void init_kernel(
     paddr_t ui_p_reg_start,
     paddr_t ui_p_reg_end,
@@ -649,13 +651,13 @@ BOOT_CODE VISIBLE void init_kernel(
 #ifdef ENABLE_SMP_SUPPORT
     /* we assume there exists a cpu with id 0 and will use it for bootstrapping */
     if (getCurrentCPUIndex() == 0) {
-        result = try_init_kernel(ui_p_reg_start,
+        result = rust_try_init_kernel(ui_p_reg_start,
                                  ui_p_reg_end,
                                  pv_offset,
                                  v_entry,
                                  dtb_addr_p, dtb_size);
     } else {
-        result = try_init_kernel_secondary_core();
+        result = rust_try_init_kernel_secondary_core();
     }
 
 #else
